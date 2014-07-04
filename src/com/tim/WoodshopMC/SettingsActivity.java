@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Global.CommonDefs;
 import com.tim.WoodshopMC.Global.GlobalData;
 import com.tim.WoodshopMC.Scan.ScanManager;
@@ -247,5 +248,17 @@ public class SettingsActivity extends BaseActivity {
             rlTimeUS.setBackgroundResource(R.drawable.bt_ustime);
             rlEuropean.setBackgroundResource(R.drawable.bt_eurotime_selected);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(SettingsActivity.this).activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(SettingsActivity.this).activityStop(this); // Add this method.
     }
 }

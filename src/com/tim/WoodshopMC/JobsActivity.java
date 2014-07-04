@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Database.DataManager;
 import com.tim.WoodshopMC.Database.FSJob;
 import com.tim.WoodshopMC.Global.CommonDefs;
@@ -408,4 +409,15 @@ public class JobsActivity extends BaseActivity{
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(JobsActivity.this).activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(JobsActivity.this).activityStop(this); // Add this method.
+    }
 }

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Database.*;
 import com.tim.WoodshopMC.Global.CommonDefs;
 import com.tim.WoodshopMC.Global.CommonMethods;
@@ -472,6 +473,13 @@ public class RecordActivity extends BaseActivity{
         }
 
         ((TextView)findViewById(R.id.txtCoverage)).setText(String.format("%.2f", coverage));
+        EasyTracker.getInstance(RecordActivity.this).activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(RecordActivity.this).activityStop(this); // Add this method.
     }
 
     private boolean isSelectable()
@@ -614,11 +622,12 @@ public class RecordActivity extends BaseActivity{
 
     private void ShowSelectDialog(int mode, Object parentNode)
     {
-        TextView txtTitle = (TextView)findViewById(R.id.txtSelectTitle);
+        ImageView imgTitle = (ImageView)findViewById(R.id.imgSelectTitle);
 
         if (mode == GlobalData.MODE_SELECT_JOB)
         {
-            txtTitle.setText("Select a Job");
+            //txtTitle.setText("Select a Job");
+            imgTitle.setImageResource(R.drawable.title_select_job);
 
             ArrayList<FSJob> jobs = DataManager.sharedInstance(RecordActivity.this).getJobs(0, "");
             adapter.setMode(mode);
@@ -628,7 +637,8 @@ public class RecordActivity extends BaseActivity{
         }
         else if (mode == GlobalData.MODE_SELECT_LOCATION)
         {
-            txtTitle.setText("Select a Location");
+            //txtTitle.setText("Select a Location");
+            imgTitle.setImageResource(R.drawable.title_select_location);
 
             ArrayList<FSLocation> locations = DataManager.sharedInstance(RecordActivity.this).getAllDistinctLocations();
             adapter.setMode(mode);
@@ -638,7 +648,8 @@ public class RecordActivity extends BaseActivity{
         }
         else if (mode == GlobalData.MODE_SELECT_PRODUCT)
         {
-            txtTitle.setText("Select a Product");
+            //txtTitle.setText("Select a Product");
+            imgTitle.setImageResource(R.drawable.title_select_product);
 
             ArrayList<FSProduct> products = DataManager.sharedInstance(RecordActivity.this).getProducts("");
             adapter.setMode(mode);
@@ -915,7 +926,6 @@ public class RecordActivity extends BaseActivity{
             FSLocProduct locProduct = new FSLocProduct();
             locProduct.locProductLocID = selectedLocation.locID;
             locProduct.locProductName = DataManager.FMD_DEFAULT_PRODUCTNAME;
-            locProduct.locProductType = FSProduct.FSPRODUCTTYPE_FINISHED;
             locProduct.locProductCoverage = coverage;
             locProduct.locProductID = DataManager.sharedInstance(RecordActivity.this).addLocProductToDatabase(locProduct);
 
@@ -960,9 +970,9 @@ public class RecordActivity extends BaseActivity{
         rlRecording.setEnabled(bEnable);
         btnRecording.setEnabled(bEnable);
         if (bEnable)
-            btnRecording.setBackgroundResource(R.drawable.bt_title_bar_save_disabled);
+            btnRecording.setBackgroundResource(R.drawable.peg_normal);
         else
-            btnRecording.setBackgroundResource(R.drawable.bt_title_bar_save);
+            btnRecording.setBackgroundResource(R.drawable.peg_down);
     }
 
     private void btnCancelEnabled(boolean bEnable)
@@ -971,8 +981,8 @@ public class RecordActivity extends BaseActivity{
         btnPause.setEnabled(bEnable);
 
         if (bEnable)
-            btnPause.setBackgroundResource(R.drawable.bt_title_bar_cancel_disabled);
+            btnPause.setBackgroundResource(R.drawable.peg_normal);
         else
-            btnPause.setBackgroundResource(R.drawable.bt_title_bar_cancel);
+            btnPause.setBackgroundResource(R.drawable.peg_down);
     }
 }

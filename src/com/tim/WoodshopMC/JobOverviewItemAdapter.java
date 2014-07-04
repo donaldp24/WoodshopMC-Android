@@ -82,7 +82,6 @@ public class JobOverviewItemAdapter extends BaseExpandableListAdapter {
 
         ((TextView)convertView.findViewById(R.id.txtLocation)).setText(headerdata.loc.locName);
         ((TextView)convertView.findViewById(R.id.txtProduct)).setText(headerdata.locProduct.locProductName);
-        ((TextView)convertView.findViewById(R.id.txtProductType)).setText(FSProduct.getDisplayProductType((int)headerdata.locProduct.locProductType));
 
         float convCoverage = (float)headerdata.locProduct.locProductCoverage;
         if (GlobalData.sharedData().settingArea == GlobalData.AREA_FEET)

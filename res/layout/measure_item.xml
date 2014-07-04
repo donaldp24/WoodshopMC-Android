@@ -30,9 +30,9 @@
             android:layout_height="50px" android:id="@+id/RLDelete"
             android:layout_toRightOf="@+id/lblTemperature">
         <ImageView
-                android:layout_width="12px"
+                android:layout_width="25px"
                 android:layout_height="fill_parent"
-                android:id="@+id/imgDel" android:src="@drawable/ic_delete" android:layout_centerHorizontal="true"/>
+                android:id="@+id/imgDel" android:src="@drawable/bt_job_delete_brown" android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </RelativeLayout>
 

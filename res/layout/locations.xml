@@ -3,7 +3,7 @@
 			  android:orientation="vertical"
 			  android:layout_width="fill_parent"
 			  android:layout_height="fill_parent"
-              android:background="@drawable/bg_all" android:id="@+id/RLLocationsRoot">
+              android:background="@drawable/background" android:id="@+id/RLLocationsRoot">
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="70px" android:layout_alignParentLeft="true"
@@ -11,21 +11,24 @@
         <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="60px"
-                android:text="@string/location_main_title"
                 android:id="@+id/lblTitle"
                 android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="26px" android:gravity="center"
                 />
+        <ImageView android:layout_width="300px" android:layout_height="25px" android:id="@+id/imgTitle"
+                   android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                   android:src="@drawable/title_locations" android:scaleType="fitCenter" android:layout_marginTop="22px"
+                   android:layout_centerHorizontal="true"/>
         <RelativeLayout android:layout_width="50px" android:layout_height="50px" android:id="@+id/RLBack"
-                        android:layout_marginLeft="5px" android:layout_marginTop="5px">
-            <ImageView android:layout_width="30px" android:layout_height="20px" android:id="@+id/imgBack"
+                        android:layout_marginLeft="5px" android:layout_marginTop="10px">
+            <ImageView android:layout_width="35px" android:layout_height="35px" android:id="@+id/imgBack"
                        android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
                        android:src="@drawable/bt_back" android:scaleType="fitCenter"
-                       android:layout_centerVertical="true" android:layout_marginLeft="10px"/>
+                       android:layout_marginTop="10px"/>
         </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="50px" android:id="@+id/RLAddBar"
+            android:layout_height="60px" android:id="@+id/RLAddBar"
             android:layout_marginLeft="20px" android:layout_marginTop="10px"
             android:background="@drawable/bg_job_keyword" android:layout_below="@+id/lblCurJob"
             android:layout_marginRight="20px">
@@ -37,17 +40,17 @@
                 android:textSize="18px" android:singleLine="true" android:hint="@string/location_add_hint"
                 android:background="@android:color/transparent"/>
         <Button
-                android:layout_width="30px"
-                android:layout_height="30px"
+                android:layout_width="35px"
+                android:layout_height="35px"
                 android:id="@+id/btnAddLocation" android:layout_toRightOf="@+id/txtLocationName"
-                android:layout_alignTop="@+id/txtLocationName" android:layout_marginLeft="12px"
-                android:background="@drawable/bt_job_add" android:layout_marginTop="5px"/>
-        <Button android:layout_width="30px" android:layout_height="30px"
-                android:id="@+id/btnDelLocation" android:layout_toRightOf="@+id/btnAddLocation"
                 android:layout_alignTop="@+id/txtLocationName" android:layout_marginLeft="8px"
-                android:background="@drawable/bt_job_delete" android:layout_marginTop="5px"/>
+                android:background="@drawable/bt_job_add" android:layout_marginTop="2px"/>
+        <Button android:layout_width="35px" android:layout_height="35px"
+                android:id="@+id/btnDelLocation" android:layout_toRightOf="@+id/btnAddLocation"
+                android:layout_alignTop="@+id/txtLocationName" android:layout_marginLeft="5px"
+                android:background="@drawable/bt_job_delete" android:layout_marginTop="2px"/>
     </RelativeLayout>
-    <TextView android:layout_width="200px" android:layout_height="50px" android:text="@string/searching"
+    <TextView android:layout_width="200px" android:layout_height="50px" android:text="No Locations"
               android:id="@+id/txtSearching" android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
               android:layout_marginTop="240px" android:textColor="#FFFFFF" android:textSize="20px"
               android:gravity="center" android:visibility="gone"/>
@@ -66,22 +69,22 @@
                 android:layout_width="96px"
                 android:layout_height="fill_parent"
                 android:id="@+id/imgRecord" android:src="@drawable/bt_record_sl"
-                android:scaleType="fitXY" android:paddingLeft="2px" android:paddingTop="3px"
-                android:paddingRight="2px" android:paddingBottom="3px"/>
+                android:scaleType="fitXY"
+                android:layout_marginTop="5px" android:layout_marginBottom="2px"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgJobs"
                    android:src="@drawable/bt_jobs_nl" android:layout_toRightOf="@+id/imgRecord"
                    android:scaleType="fitXY"
-                />
+                   android:layout_marginTop="5px" android:layout_marginBottom="2px"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgProducts"
                    android:src="@drawable/bt_products_nl" android:layout_toRightOf="@+id/imgJobs"
                    android:scaleType="fitXY"
-                />
+                   android:layout_marginTop="5px" android:layout_marginBottom="2px"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgReports"
                    android:src="@drawable/bt_report_nl" android:layout_toRightOf="@+id/imgProducts"
-                   android:scaleType="fitXY"/>
+                   android:scaleType="fitXY" android:layout_marginTop="5px" android:layout_marginBottom="2px"/>
         <ImageView android:layout_width="96px" android:layout_height="fill_parent" android:id="@+id/imgSettings"
                    android:src="@drawable/bt_setting_nl" android:layout_toRightOf="@+id/imgReports"
-                   android:scaleType="fitXY"/>
+                   android:scaleType="fitXY" android:layout_marginTop="5px" android:layout_marginBottom="2px"/>
     </RelativeLayout>
     <TextView
             android:layout_width="100px"

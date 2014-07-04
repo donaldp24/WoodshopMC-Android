@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Database.*;
 import com.tim.WoodshopMC.Global.CommonDefs;
 import com.tim.WoodshopMC.Global.CommonMethods;
@@ -144,11 +145,15 @@ public class ReadingActivity extends BaseActivity {
         GlobalData globalData = GlobalData.sharedData();
         if (curDate == null || CommonMethods.compareOnlyDate(curDate, now) == 0) // check today
         {
-            ((TextView)findViewById(R.id.lblTitle)).setText(getString(R.string.record_curreading_title));
+            //((TextView)findViewById(R.id.lblTitle)).setText(getString(R.string.record_curreading_title));
+            ((ImageView)findViewById(R.id.imgTitleReadings)).setVisibility(View.INVISIBLE);
+            ((ImageView)findViewById(R.id.imgTitleTodaysReadings)).setVisibility(View.VISIBLE);
         }
         else
         {
-            ((TextView)findViewById(R.id.lblTitle)).setText(String.format("Readings (%s)", CommonMethods.date2str(curDate, globalData.settingDateFormat)));
+            //((TextView)findViewById(R.id.lblTitle)).setText(String.format("Readings (%s)", CommonMethods.date2str(curDate, globalData.settingDateFormat)));
+            ((ImageView)findViewById(R.id.imgTitleReadings)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.imgTitleTodaysReadings)).setVisibility(View.INVISIBLE);
         }
 
         float coverage = 0;
@@ -168,7 +173,7 @@ public class ReadingActivity extends BaseActivity {
 
             ((TextView)findViewById(R.id.txtName)).setText(jobName);
             ((TextView)findViewById(R.id.txtLocation)).setText(getString(R.string.record_curreading_location) + " " + locName);
-            ((TextView)findViewById(R.id.txtProduct)).setText(getString(R.string.record_curreading_product) + String.format(" %s (%s)", procName, FSProduct.getDisplayProductType((int)_curLocProduct.locProductType)));
+            ((TextView)findViewById(R.id.txtProduct)).setText(getString(R.string.record_curreading_product) + String.format(" %s", procName));
 
             coverage = (float)_curLocProduct.locProductCoverage;
         }
@@ -209,7 +214,13 @@ public class ReadingActivity extends BaseActivity {
         }
 
         ((TextView)findViewById(R.id.txtCoverage)).setText(strCoverage);
+        EasyTracker.getInstance(ReadingActivity.this).activityStart(this);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(ReadingActivity.this).activityStop(this); // Add this method.
     }
 
     @Override
@@ -404,6 +415,7 @@ public class ReadingActivity extends BaseActivity {
             int count = DataManager.sharedInstance(ReadingActivity.this).getReadingsCount(_curLocProduct.locProductID);
             if (count == 1)
             {
+                /*
                 String titleText = "First reading for this Product!\n";
                 String bodyText = "";
                 if (_curLocProduct.locProductType == FSProduct.FSPRODUCTTYPE_FINISHED)
@@ -418,6 +430,7 @@ public class ReadingActivity extends BaseActivity {
                 // Show Message Box
                 WarningAlertDialog alertDlg = new WarningAlertDialog(ReadingActivity.this, R.style.NoTitleDialog, titleText, bodyText);
                 alertDlg.show();
+                */
             }
         }
     }

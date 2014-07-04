@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Database.DataManager;
 import com.tim.WoodshopMC.Database.FSProduct;
 import com.tim.WoodshopMC.Global.CommonDefs;
@@ -27,8 +28,6 @@ public class ProductsActivity extends BaseActivity{
 
     boolean bShowDropMenu = false;
     boolean bShowListDrop = false;
-
-    int finishNum = -1;
 
     ListView listProducts;
     ProductItemAdapter productAdapter;
@@ -113,30 +112,6 @@ public class ProductsActivity extends BaseActivity{
             }
         });
 
-        ImageView imgDrpDown = (ImageView)findViewById(R.id.imgDropButton);
-        imgDrpDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(-1);
-            }
-        });
-
-        RelativeLayout rlItemFinished = (RelativeLayout)findViewById(R.id.RLItemFinished);
-        rlItemFinished.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(FSProduct.FSPRODUCTTYPE_FINISHED);
-            }
-        });
-
-        RelativeLayout rlItemSubFloor = (RelativeLayout)findViewById(R.id.RLItemSubFloor);
-        rlItemSubFloor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(FSProduct.FSPRODUCTTYPE_SUBFLOOR);
-            }
-        });
-
         Button btnAdd = (Button)findViewById(R.id.btnAddProduct);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,15 +125,14 @@ public class ProductsActivity extends BaseActivity{
                 }
 
                 DataManager _instance = DataManager.sharedInstance(ProductsActivity.this);
-                if (_instance.isExistSameProduct(productName, finishNum))
+                if (_instance.isExistSameProduct(productName))
                 {
-                    CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist");
+                    CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + " is already exist");
                     return;
                 }
 
                 FSProduct newProduct = new FSProduct();
                 newProduct.productName = productName;
-                newProduct.productType = finishNum;
                 newProduct.productID = DataManager.sharedInstance(ProductsActivity.this).addProductToDatabase(newProduct);
 
                 ((EditText)findViewById(R.id.txtProductName)).setText("");
@@ -177,9 +151,6 @@ public class ProductsActivity extends BaseActivity{
             }
         });
 
-        finishNum = FSProduct.FSPRODUCTTYPE_SUBFLOOR;
-        ((TextView)findViewById(R.id.txtCurrentType)).setText(FSProduct.getDisplayProductType(finishNum));
-
         EditText txtSearchField = (EditText)findViewById(R.id.txtProductName);
         txtSearchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -197,18 +168,6 @@ public class ProductsActivity extends BaseActivity{
                 initTableData();
             }
         });
-    }
-
-    private void changeDropList(int type)
-    {
-        if (type != -1)
-        {
-            ((TextView)findViewById(R.id.txtCurrentType)).setText(FSProduct.getDisplayProductType(type));
-            finishNum = type;
-        }
-
-        bShowDropMenu = !bShowDropMenu;
-        ((RelativeLayout)findViewById(R.id.RLDropList)).setVisibility((bShowDropMenu) ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void hideSoftKeyboard() {
@@ -306,21 +265,20 @@ public class ProductsActivity extends BaseActivity{
         confirmDialog.show();
     }
 
-    public boolean changeProduct(int productid, String productName, int producttype)
+    public boolean changeProduct(int productid, String productName)
     {
         if (arrProducts == null || productid >= arrProducts.size())
             return false;
 
         DataManager _instance = DataManager.sharedInstance(ProductsActivity.this);
-        if (_instance.isExistSameProduct(productName, producttype))
+        if (_instance.isExistSameProduct(productName))
         {
-            CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
+            CommonMethods.showAlertMessage(ProductsActivity.this, "Product " + productName + " is already exist");
             return false;
         }
 
         FSProduct _curProduct = arrProducts.get(productid);
         _curProduct.productName = productName;
-        _curProduct.productType = producttype;
 
         _instance.updateProductToDatabase(_curProduct);
 
@@ -336,5 +294,17 @@ public class ProductsActivity extends BaseActivity{
                 listProducts.setSelection(productAdapter.getCount() - 1);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(ProductsActivity.this).activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(ProductsActivity.this).activityStop(this); // Add this method.
     }
 }

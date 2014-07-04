@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.tim.WoodshopMC.Database.*;
 import com.tim.WoodshopMC.Global.CommonDefs;
 import com.tim.WoodshopMC.Global.CommonMethods;
@@ -31,8 +32,6 @@ public class LocProductsActivity extends BaseActivity{
     boolean bShowDropMenu = false;
     boolean bFlagAddedLoc = false;
     long addedLocId = 0;
-
-    int finishNum = -1;
 
     boolean bSwitchOn = true;
 
@@ -125,30 +124,6 @@ public class LocProductsActivity extends BaseActivity{
             }
         });
 
-        ImageView imgDrpDown = (ImageView)findViewById(R.id.imgDropButton);
-        imgDrpDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(-1);
-            }
-        });
-
-        RelativeLayout rlItemFinished = (RelativeLayout)findViewById(R.id.RLItemFinished);
-        rlItemFinished.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(FSProduct.FSPRODUCTTYPE_FINISHED);
-            }
-        });
-
-        RelativeLayout rlItemSubFloor = (RelativeLayout)findViewById(R.id.RLItemSubFloor);
-        rlItemSubFloor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeDropList(FSProduct.FSPRODUCTTYPE_SUBFLOOR);
-            }
-        });
-
         Button btnAdd = (Button)findViewById(R.id.btnAddProduct);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,15 +140,14 @@ public class LocProductsActivity extends BaseActivity{
 
                 if (bSwitchOn)
                 {
-                    if (_instance.isExistSameProduct(productName, finishNum))
+                    if (_instance.isExistSameProduct(productName))
                     {
-                        CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ") is already exist");
+                        CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + " is already exist");
                         return;
                     }
 
                     FSProduct newProduct = new FSProduct();
                     newProduct.productName = productName;
-                    newProduct.productType = finishNum;
                     newProduct.productID = DataManager.sharedInstance(LocProductsActivity.this).addProductToDatabase(newProduct);
                 }
                 else
@@ -182,7 +156,6 @@ public class LocProductsActivity extends BaseActivity{
                     locProduct.locProductID = 0;
                     locProduct.locProductLocID = 0;
                     locProduct.locProductName = productName;
-                    locProduct.locProductType = finishNum;
 
                     if (curLoc.locID == 0)
                     {
@@ -196,9 +169,9 @@ public class LocProductsActivity extends BaseActivity{
 
                     if (curLoc != null)
                     {
-                        if (DataManager.sharedInstance(LocProductsActivity.this).isExistSameLocProduct(curLoc.locID, productName, finishNum))
+                        if (DataManager.sharedInstance(LocProductsActivity.this).isExistSameLocProduct(curLoc.locID, productName))
                         {
-                            CommonMethods.showAlertMessage(LocProductsActivity.this, "Product '" + productName + "(" + FSProduct.getDisplayProductType(finishNum) + ")' is already exist in this Location");
+                            CommonMethods.showAlertMessage(LocProductsActivity.this, "Product '" + productName + "' is already exist in this Location");
                             return;
                         }
 
@@ -211,7 +184,6 @@ public class LocProductsActivity extends BaseActivity{
                             sameProduct = new FSProduct();
                             sameProduct.productID = 0;
                             sameProduct.productName = locProduct.locProductName;
-                            sameProduct.productType = locProduct.locProductType;
 
                             DataManager.sharedInstance(LocProductsActivity.this).addProductToDatabase(sameProduct);
                         }
@@ -233,9 +205,6 @@ public class LocProductsActivity extends BaseActivity{
                 ((EditText)findViewById(R.id.txtProductName)).setText("");
             }
         });
-
-        finishNum = FSProduct.FSPRODUCTTYPE_SUBFLOOR;
-        ((TextView)findViewById(R.id.txtCurrentType)).setText(FSProduct.getDisplayProductType(finishNum));
 
         EditText txtSearchField = (EditText)findViewById(R.id.txtProductName);
         txtSearchField.addTextChangedListener(new TextWatcher() {
@@ -307,6 +276,13 @@ public class LocProductsActivity extends BaseActivity{
         }
 
         ((TextView)findViewById(R.id.lblLocation)).setText(getString(R.string.product_loc_location) + " " + jobName + "." + locName);
+        EasyTracker.getInstance(LocProductsActivity.this).activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(LocProductsActivity.this).activityStop(this); // Add this method.
     }
 
     public void clickItem(int position)
@@ -324,18 +300,6 @@ public class LocProductsActivity extends BaseActivity{
 
         setResult(Activity.RESULT_OK, data);
         finish();
-    }
-
-    private void changeDropList(int type)
-    {
-        if (type != -1)
-        {
-            ((TextView)findViewById(R.id.txtCurrentType)).setText(FSProduct.getDisplayProductType(type));
-            finishNum = type;
-        }
-
-        bShowDropMenu = !bShowDropMenu;
-        ((RelativeLayout)findViewById(R.id.RLDropList)).setVisibility((bShowDropMenu) ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void hideSoftKeyboard() {
@@ -458,7 +422,7 @@ public class LocProductsActivity extends BaseActivity{
         confirmDialog.show();
     }
 
-    public boolean changeProduct(int productid, String productName, int producttype)
+    public boolean changeProduct(int productid, String productName)
     {
         if (bSwitchOn)
         {
@@ -466,15 +430,14 @@ public class LocProductsActivity extends BaseActivity{
                 return false;
 
             DataManager _instance = DataManager.sharedInstance(LocProductsActivity.this);
-            if (_instance.isExistSameProduct(productName, producttype))
+            if (_instance.isExistSameProduct(productName))
             {
-                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
+                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + " is already exist");
                 return false;
             }
 
             FSProduct _curProduct = arrProducts.get(productid);
             _curProduct.productName = productName;
-            _curProduct.productType = producttype;
 
             _instance.updateProductToDatabase(_curProduct);
 
@@ -486,15 +449,14 @@ public class LocProductsActivity extends BaseActivity{
                 return false;
 
             DataManager _instance = DataManager.sharedInstance(LocProductsActivity.this);
-            if (_instance.isExistSameLocProduct(curLoc.locID, productName, producttype))
+            if (_instance.isExistSameLocProduct(curLoc.locID, productName))
             {
-                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + "(" + FSProduct.getDisplayProductType(producttype) + ") is already exist");
+                CommonMethods.showAlertMessage(LocProductsActivity.this, "Product " + productName + " is already exist");
                 return false;
             }
 
             FSLocProduct _curProduct = arrLocProducts.get(productid);
             _curProduct.locProductName = productName;
-            _curProduct.locProductType = producttype;
 
             _instance.updateLocProductToDatabase(_curProduct);
 
@@ -504,7 +466,6 @@ public class LocProductsActivity extends BaseActivity{
                 sameProduct = new FSProduct();
                 sameProduct.productID = 0;
                 sameProduct.productName = _curProduct.locProductName;
-                sameProduct.productType = _curProduct.locProductType;
 
                 DataManager.sharedInstance(LocProductsActivity.this).addProductToDatabase(sameProduct);
             }

@@ -148,7 +148,7 @@ public class SelectViewItemAdapter extends BaseAdapter {
         {
             if (m_productInfos != null)
             {
-                itemTitle = m_productInfos.get(position).productName + "(" + FSProduct.getDisplayProductType((int)m_productInfos.get(position).productType) + ")";
+                itemTitle = m_productInfos.get(position).productName;
                 itemData = m_productInfos.get(position);
             }
         }

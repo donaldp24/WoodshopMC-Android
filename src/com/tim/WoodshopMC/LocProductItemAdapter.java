@@ -25,7 +25,6 @@ public class LocProductItemAdapter extends BaseAdapter {
     boolean bSwitchOn = true;
 
     EditText        currentFocus = null;
-    int             curSelectedType = -1;
     int             nEditingIdx = -1;
 
     public LocProductItemAdapter(LocProductsActivity activity, Context context) {
@@ -116,7 +115,6 @@ public class LocProductItemAdapter extends BaseAdapter {
         FSProduct _productInfo = null;
 
         String productName = "";
-        int productType = FSProduct.FSPRODUCTTYPE_SUBFLOOR;
 
         if (bSwitchOn == true)
         {
@@ -124,7 +122,6 @@ public class LocProductItemAdapter extends BaseAdapter {
             {
                 _productInfo = m_productInfos.get(position);
                 productName = _productInfo.productName;
-                productType = (int)_productInfo.productType;
             }
         }
         else
@@ -133,7 +130,6 @@ public class LocProductItemAdapter extends BaseAdapter {
             {
                 _locProductinfo = m_locProductInfos.get(position);
                 productName = _locProductinfo.locProductName;
-                productType = (int)_locProductinfo.locProductType;
             }
         }
 
@@ -154,26 +150,8 @@ public class LocProductItemAdapter extends BaseAdapter {
         Button btnEditDone = (Button)convertView.findViewById(R.id.btnEditDone);
         Button btnEditCancel = (Button)convertView.findViewById(R.id.btnCancel);
 
-        Spinner spinner = (Spinner)convertView.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter_state = ArrayAdapter.createFromResource(mContext, R.array.product_array, R.layout.custom_spiner);
-        adapter_state.setDropDownViewResource(R.layout.custom_spiner);
-        spinner.setAdapter(adapter_state);
-        spinner.setSelection(productType);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
         // Bind the data efficiently with the holder.
         ((TextView)convertView.findViewById(R.id.lblProductName)).setText(productName);
-        ((TextView)convertView.findViewById(R.id.lblType)).setText(FSProduct.getDisplayProductType(productType));
 
         try {
             if (nEditingIdx == position)
@@ -185,7 +163,6 @@ public class LocProductItemAdapter extends BaseAdapter {
                 ((EditText) convertView.findViewById(R.id.txtItemProductName)).setFocusableInTouchMode(true);
                 ((EditText) convertView.findViewById(R.id.txtItemProductName)).requestFocus();
 
-                ((TextView) convertView.findViewById(R.id.txtItemCurrentType)).setText(FSProduct.getDisplayProductType(productType));
                 ((EditText) convertView.findViewById(R.id.txtItemProductName)).setText(productName);
                 ((EditText) convertView.findViewById(R.id.txtItemProductName)).setSelection(productName.length());
             }
@@ -202,7 +179,6 @@ public class LocProductItemAdapter extends BaseAdapter {
         itemInfo.parentView = convertView;
         itemInfo.itemId = position;
         itemInfo.productName = productName;
-        itemInfo.productType = productType;
 
         btnProductEdit.setTag(itemInfo);
         btnProductEdit.setOnClickListener(new OnClickListener() {
@@ -214,9 +190,6 @@ public class LocProductItemAdapter extends BaseAdapter {
                 ProductItem itemInfo = (ProductItem) v.getTag();
                 nEditingIdx = itemInfo.itemId;
                 currentFocus = (EditText) itemInfo.parentView.findViewById(R.id.txtItemProductName);
-                curSelectedType = itemInfo.productType;
-
-                ((TextView) itemInfo.parentView.findViewById(R.id.txtItemCurrentType)).setText(FSProduct.getDisplayProductType((int)itemInfo.productType));
 
                 ((RelativeLayout) itemInfo.parentView.findViewById(R.id.RLShowBar)).setVisibility(View.GONE);
                 ((RelativeLayout) itemInfo.parentView.findViewById(R.id.RLEditBar)).setVisibility(View.VISIBLE);
@@ -264,12 +237,10 @@ public class LocProductItemAdapter extends BaseAdapter {
                 ((RelativeLayout)itemInfo.parentView.findViewById(R.id.RLShowBar)).setVisibility(View.VISIBLE);
                 ((RelativeLayout)itemInfo.parentView.findViewById(R.id.RLEditBar)).setVisibility(View.GONE);
 
-                curSelectedType = (int)((Spinner)itemInfo.parentView.findViewById(R.id.spinner)).getSelectedItemPosition();
                 String strNewName = ((EditText)itemInfo.parentView.findViewById(R.id.txtItemProductName)).getText().toString();
-                if (mActivity.changeProduct(itemInfo.itemId, strNewName, curSelectedType))
+                if (mActivity.changeProduct(itemInfo.itemId, strNewName))
                 {
                     ((TextView)itemInfo.parentView.findViewById(R.id.lblProductName)).setText(strNewName);
-                    ((TextView)itemInfo.parentView.findViewById(R.id.txtItemCurrentType)).setText(FSProduct.getDisplayProductType(curSelectedType));
                 }
 
                 hideSoftKeyboard(itemInfo.parentView.findViewById(R.id.txtItemProductName));
@@ -316,6 +287,5 @@ public class LocProductItemAdapter extends BaseAdapter {
         public View parentView;
         public int itemId;
         public String productName;
-        public int productType;
     }
 }

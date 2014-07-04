@@ -317,19 +317,6 @@ public class FSReportHelper {
 
             drawText(strHeader, getRealRect(60, (int)ypos, (int)width, 30), font);
 
-            if (locProduct.locProductName.equals(DataManager.FMD_DEFAULT_PRODUCTNAME))
-            {
-                int xpos = 60 + (int)width;
-                strHeader = String.format("(%s)", FSProduct.getDisplayProductType((int) locProduct.locProductType));
-                font.setSize(22);
-
-                txtLine.setFont(font);
-                txtLine.setText(strHeader);
-                width = txtLine.getWidth() + 20;
-
-                drawText(strHeader, getRealRect((int)xpos, (int)ypos, (int)width, 30), font);
-            }
-
             ypos += 30;
 
             font.setSize(22);
@@ -1002,13 +989,13 @@ public class FSReportHelper {
     private void drawLogoImage() {
         try
         {
-            InputStream in = GlobalData._mainContext.getResources().openRawResource(R.raw.reportlogobottomcenter);
+            InputStream in = GlobalData._mainContext.getResources().openRawResource(R.raw.wagner_pdf_image);
 
             Image demoImage = new Image(pdf, in, ImageType.PNG);
-            demoImage.scaleBy(0.2f);
+            //demoImage.scaleBy(0.2f);
             float imageWidth = demoImage.getWidth();
             float imageHeight = demoImage.getHeight();
-            demoImage.setPosition(pageSize.cx / 2.0 - imageWidth / 2.0 , pageSize.cy - imageHeight - kBorderInset - kMarginInset - 200);
+            demoImage.setPosition(imageWidth * 3, kBorderInset + kMarginInset + 810.0);
             demoImage.drawOn(curPage);
         }
         catch (Exception e)
