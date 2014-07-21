@@ -1,5 +1,6 @@
 package com.tim.WoodshopMC;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -203,6 +204,13 @@ public class JobsArchiveActivity extends BaseActivity{
                 finish();
             }
         });
+    }
+
+    public void clickItem(int position)
+    {
+        Intent overviewIntent = new Intent(JobsArchiveActivity.this, JobOverviewActivity.class);
+        overviewIntent.putExtra(CommonDefs.ACTIVITY_TAG_JOBID, arrJobNames.get(position).jobID);
+        startActivity(overviewIntent);
     }
 
     public void hideSoftKeyboard() {
