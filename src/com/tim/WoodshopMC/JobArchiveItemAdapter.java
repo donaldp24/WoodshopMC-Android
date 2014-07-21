@@ -93,7 +93,7 @@ public class JobArchiveItemAdapter extends BaseAdapter {
         {
             ((TextView)convertView.findViewById(R.id.lblJobName)).setText("");
         }
-
+        /*
         RelativeLayout rootItem = (RelativeLayout)convertView.findViewById(R.id.RLJobsItemRoot);
         rootItem.setTag(position);
         rootItem.setOnClickListener(new OnClickListener() {
@@ -102,7 +102,7 @@ public class JobArchiveItemAdapter extends BaseAdapter {
                 mActivity.clickItem((Integer)v.getTag());
             }
         });
-
+          */
         Button btnDelete = (Button)convertView.findViewById(R.id.btnJobDelete);
         Button btnResend = (Button)convertView.findViewById(R.id.btnJobResend);
 
