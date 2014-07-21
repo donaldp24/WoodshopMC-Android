@@ -549,41 +549,42 @@ public class DataManager {
     }
 
     public long addLocProductToDatabaseWithProduct(FSProduct product, long locID, double coverage) {
-        /*ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
         values.put("locproduct_locid", locID);
         values.put("locproduct_productname", product.productName);
-        values.put("locproduct_producttype", product.productType);
         values.put("locproduct_coverage", coverage);
         values.put("deleted", 0);
         long ret = _database.insert("tbl_locproduct", null, values);
         if (ret < 0)
             return 0;
-        return ret;*/
+        return ret;
+        /*
         String sql;
         sql = String.format("insert into tbl_locproduct (locproduct_locid, locproduct_productname, locproduct_coverage, deleted) values (%d, '%s', %f, 0)", locID, product.productName, coverage);
         boolean bSuccess = _database.executeUpdate(sql);
         if (bSuccess == false)
             return 0;
-        return 1;
+        return 1;*/
     }
 
     public long addLocProductToDatabase(FSLocProduct locProduct) {
-        /*ContentValues values = new ContentValues();
-        values.put("locproduct_locid", locProduct.locProductID);
+        ContentValues values = new ContentValues();
+        values.put("locproduct_locid", locProduct.locProductLocID);
         values.put("locproduct_productname", locProduct.locProductName);
-        values.put("locproduct_producttype", locProduct.locProductType);
         values.put("locproduct_coverage", locProduct.locProductCoverage);
         values.put("deleted", 0);
         long ret = _database.insert("tbl_locproduct", null, values);
         if (ret < 0)
             return 0;
-        return ret;*/
+        return ret;
+        /*
         String sql;
         sql = String.format("insert into tbl_locproduct (locproduct_locid, locproduct_productname, locproduct_coverage, deleted) values (%d, '%s', %f, 0)", locProduct.locProductLocID, locProduct.locProductName, locProduct.locProductCoverage);
         boolean bSuccess = _database.executeUpdate(sql);
         if (bSuccess == false)
             return 0;
         return 1;
+        */
     }
 
     public boolean updateLocProductToDatabase(FSLocProduct locProduct) {
